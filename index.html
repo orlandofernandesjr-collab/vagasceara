@@ -872,7 +872,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Seu WhatsApp</label>
+          <label>Seu WhatsApp (opcional)</label>
           <input type="tel" id="eWhats" placeholder="(88) 99999-9999">
         </div>
         <div class="form-group">
@@ -1111,10 +1111,10 @@ function enviarVaga() {
   const func = document.getElementById('eFunc').value;
   const cidade = document.getElementById('eCidade').value.trim();
   const regime = document.getElementById('eRegime').value;
-  const whats = document.getElementById('eWhats').value.trim();
+  const email = document.getElementById('eEmail').value.trim();
 
-  if (!func || !cidade || !regime || !whats) {
-    alert('Por favor, preencha os campos obrigatórios (Função, Cidade, Regime e WhatsApp).');
+  if (!func || !cidade || !regime || !email) {
+    alert('Por favor, preencha os campos obrigatórios (Função, Cidade, Regime e E-mail).');
     return;
   }
   mostrarToast('✅ Vaga enviada! Publicaremos em até 24 horas.');
