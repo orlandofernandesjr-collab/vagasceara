@@ -1107,24 +1107,59 @@ function enviarCandidatura() {
   document.getElementById('cObs').value = '';
 }
 
-function enviarVaga() {
+async function enviarVaga() {
   const func = document.getElementById('eFunc').value;
   const cidade = document.getElementById('eCidade').value.trim();
   const regime = document.getElementById('eRegime').value;
   const email = document.getElementById('eEmail').value.trim();
+  const qtd = document.getElementById('eQtd').value.trim();
+  const desc = document.getElementById('eDescricao').value.trim();
+  const whats = document.getElementById('eWhats').value.trim();
 
   if (!func || !cidade || !regime || !email) {
     alert('Por favor, preencha os campos obrigatórios (Função, Cidade, Regime e E-mail).');
     return;
   }
-  mostrarToast('✅ Vaga enviada! Publicaremos em até 24 horas.');
-  document.getElementById('eFunc').value = '';
-  document.getElementById('eCidade').value = '';
-  document.getElementById('eQtd').value = '';
-  document.getElementById('eRegime').value = '';
-  document.getElementById('eDescricao').value = '';
-  document.getElementById('eWhats').value = '';
-  document.getElementById('eEmail').value = '';
+
+  const btn = document.querySelector('.form-empresa .btn-submit');
+  btn.textContent = 'ENVIANDO...';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch('https://formspree.io/f/xeepgvea', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: '🏗 Nova Vaga — Vagas Ceará',
+        Função: func,
+        'Cidade/Obra': cidade,
+        'Qtd de Vagas': qtd || '1',
+        Regime: regime,
+        Descrição: desc || '—',
+        WhatsApp: whats || '—',
+        'E-mail': email,
+        _replyto: email
+      })
+    });
+
+    if (resp.ok) {
+      mostrarToast('✅ Vaga enviada! Entraremos em contato em até 24 horas.');
+      document.getElementById('eFunc').value = '';
+      document.getElementById('eCidade').value = '';
+      document.getElementById('eQtd').value = '';
+      document.getElementById('eRegime').value = '';
+      document.getElementById('eDescricao').value = '';
+      document.getElementById('eWhats').value = '';
+      document.getElementById('eEmail').value = '';
+    } else {
+      mostrarToast('❌ Erro ao enviar. Tente novamente ou entre em contato por e-mail.');
+    }
+  } catch(e) {
+    mostrarToast('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+  }
+
+  btn.textContent = 'PUBLICAR VAGA';
+  btn.disabled = false;
 }
 
 function mostrarToast(msg) {
